@@ -2,7 +2,7 @@ package com.example.paddit.activity
 
 import android.os.Bundle
 import android.util.Log
-import com.example.paddit.PostApi
+import com.example.paddit.api.PostApi
 import com.example.paddit.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

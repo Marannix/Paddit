@@ -1,6 +1,6 @@
 package com.example.paddit.dagger.modules
 
-import com.example.paddit.PostApi
+import com.example.paddit.api.PostApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
