@@ -1,9 +1,7 @@
 package com.example.paddit.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.paddit.ApiService
 import com.example.paddit.PostApi
 import com.example.paddit.R
 import io.reactivex.android.schedulers.AndroidSchedulers
