@@ -1,15 +1,21 @@
-package com.example.paddit
+package com.example.paddit.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.paddit.ApiService
+import com.example.paddit.PostApi
+import com.example.paddit.R
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    private val apiService = object : ApiService {}
+    @Inject
+    lateinit var postApi: PostApi
+//    private val apiService = object : ApiService {}
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun retrievePosts() {
-        val disposable = apiService.postApi().getPosts()
+        val disposable = postApi.getPosts()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
