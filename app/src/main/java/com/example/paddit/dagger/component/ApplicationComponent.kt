@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.paddit.MainApplication
 import com.example.paddit.dagger.modules.ActivityBuilder
 import com.example.paddit.dagger.modules.ApiModule
+import com.example.paddit.dagger.modules.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 @Component(
     modules = [ActivityBuilder::class,
         ApiModule::class,
+        ViewModelModule::class,
         AndroidSupportInjectionModule::class]
 )
 interface ApplicationComponent : AndroidInjector<MainApplication> {
