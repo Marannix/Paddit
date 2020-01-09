@@ -23,6 +23,6 @@ class DashboardActivity : BaseActivity() {
 
 
     private fun retrievePosts() {
-        viewModel.getStuff()
+        viewModel.getPosts()
     }
 }

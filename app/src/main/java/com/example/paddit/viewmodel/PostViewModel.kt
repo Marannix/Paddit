@@ -1,55 +1,53 @@
 package com.example.paddit.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.paddit.model.PostResponse
-import com.example.paddit.model.UsersModel
-import com.example.paddit.model.UserResponse
-import com.example.paddit.repository.PostRepository
 import com.example.paddit.repository.UserRepository
-import io.reactivex.Observable
+import com.example.paddit.state.PostDataState
+import com.example.paddit.usecase.PostUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
-
 import javax.inject.Inject
 
 class PostViewModel @Inject constructor(
-    private val postRepository: PostRepository,
+    private val postUseCase: PostUseCase,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    var posts: MutableLiveData<List<PostResponse>> = MutableLiveData(emptyList())
-
-    fun stuff(): Observable<UsersModel> {
-        return Observable.zip(postRepository.getPosts().toObservable(), userRepository.getUsers().toObservable(),
-            BiFunction { post: List<PostResponse>, user: List<UserResponse> -> UsersModel(post, user) }
-        )
-    }
-
-    fun getStuff() {
-        val disposable = stuff().observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("All good here - Post", it.posts[1].userId.toString())
-                Log.d("All good here - User", it.user[1].username)
-            }, {
-                Log.d("This ain't it chief", it.message)
-            })
-
-        disposables.add(disposable)
-    }
+//    var posts: MutableLiveData<List<PostResponse>> = MutableLiveData(emptyList())
+//
+//    fun stuff(): Observable<UsersModel> {
+//        return Observable.zip(postRepository.getPosts().toObservable(), userRepository.getUsers().toObservable(),
+//            BiFunction { post: List<PostResponse>, user: List<UserResponse> -> UsersModel(post, user) }
+//        )
+//    }
+//
+//    fun getStuff() {
+//        val disposable = stuff().observeOn(AndroidSchedulers.mainThread())
+//            .subscribe({
+//                Log.d("All good here - Post", it.posts[1].userId.toString())
+//                Log.d("All good here - User", it.user[1].username)
+//            }, {
+//                Log.d("This ain't it chief", it.message)
+//            })
+//
+//        disposables.add(disposable)
+//    }
 
     fun getPosts() {
-        val disposable = postRepository.getPosts()
+        val disposable = postUseCase.getPosts()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                posts.value = it
-                Log.d("All good here - Post", it[1].toString())
-            }, {
-                Log.d("This ain't it chief", it.message)
-            })
+            .subscribe { postDataState ->
+                when (postDataState) {
+                    is PostDataState.Success -> {
+                        Log.d("All good here - Post", postDataState.posts[1].toString())
+                    }
+                    is PostDataState.GenericError -> {
+                        Log.d("This ain't it chief", postDataState.errorMessage)
+                    }
+                }
+            }
 
         disposables.add(disposable)
     }
