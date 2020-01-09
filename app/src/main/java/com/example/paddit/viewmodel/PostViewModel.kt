@@ -1,14 +1,16 @@
 package com.example.paddit.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.paddit.repository.UserRepository
-import com.example.paddit.state.PostDataState
-import com.example.paddit.state.UserDataState
+import com.example.paddit.model.PostResponse
+import com.example.paddit.model.UserResponse
 import com.example.paddit.usecase.PostUseCase
 import com.example.paddit.usecase.UserUseCase
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.Singles
 import javax.inject.Inject
 
 class PostViewModel @Inject constructor(
@@ -16,71 +18,59 @@ class PostViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
-//    var posts: MutableLiveData<List<PostResponse>> = MutableLiveData(emptyList())
-//
-//    fun stuff(): Observable<UsersModel> {
-//        return Observable.zip(postRepository.getPosts().toObservable(), userRepository.getUsers().toObservable(),
-//            BiFunction { post: List<PostResponse>, user: List<UserResponse> -> UsersModel(post, user) }
-//        )
-//    }
-//
-//    fun getStuff() {
-//        val disposable = stuff().observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                Log.d("All good here - Post", it.posts[1].userId.toString())
-//                Log.d("All good here - User", it.user[1].username)
-//            }, {
-//                Log.d("This ain't it chief", it.message)
-//            })
-//
-//        disposables.add(disposable)
-//    }
-
-    fun getPosts() {
-        val disposable = postUseCase.getPosts()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { postDataState ->
-                when (postDataState) {
-                    is PostDataState.Success -> {
-                        Log.d("All good here - Post", postDataState.posts[1].toString())
-                    }
-                    is PostDataState.GenericError -> {
-                        Log.d("This ain't it chief", postDataState.errorMessage)
-                    }
-                }
-            }
-
-        disposables.add(disposable)
+    val livedata = MutableLiveData<ViewState>().apply {
+        value = ViewState.Empty
     }
 
-    fun getUsers() {
-//        val disposable = userRepository.getUsers()
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({
-//                Log.d("All good here - User", it[1].username)
-//            }, {
-//                Log.d("This ain't it chief", it.message)
-//            })
+    private val disposables = CompositeDisposable()
 
-        val disposable = userUseCase.getUsers()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { userDataState ->
-                when (userDataState) {
-                    is UserDataState.Success -> {
-                        Log.d("All good here - User", userDataState.users[1].toString())
-                    }
-                    is UserDataState.GenericError -> {
-                        Log.d("This ain't it chief", userDataState.errorMessage)
-                    }
+    fun start() {
+        disposables.add(getInformation())
+    }
+
+    private fun getInformation(): Disposable {
+        return Singles.zip(userUseCase.getUsers(), postUseCase.getPosts()) { user, posts ->
+            createViewState(Event.Success(posts, user))
+        }.observeOn(AndroidSchedulers.mainThread())
+            .toObservable()
+            .startWith(ViewState.Loading)
+            .onErrorResumeNext { throwable: Throwable -> Observable.just(createViewState(Event.Error(throwable.message))) }
+            .subscribe { viewstate ->
+                livedata.value = viewstate
+            }
+    }
+
+
+    private fun createViewState(event: Event): ViewState {
+        return when (event) {
+            is Event.Success -> {
+                //TODO: Fix hacky way of handling error
+                if (event.post.isNullOrEmpty() && event.users.isNullOrEmpty()) {
+                    ViewState.Error("Both Post and Users are Empty")
+                } else {
+                    ViewState.Content(event.post, event.users)
                 }
             }
-
-        disposables.add(disposable)
+            is Event.Error -> {
+                ViewState.Error(event.error)
+            }
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    sealed class Event {
+        data class Success(val post: List<PostResponse>, val users: List<UserResponse>) : Event()
+        data class Error(val error: String?) : Event()
+    }
+
+    sealed class ViewState {
+        object Empty : ViewState()
+        object Loading : ViewState()
+        data class Content(val post: List<PostResponse>, val users: List<UserResponse>) : ViewState()
+        data class Error(val error: String?) : ViewState()
     }
 }
