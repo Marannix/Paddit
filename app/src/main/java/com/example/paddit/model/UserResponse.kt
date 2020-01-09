@@ -1,6 +1,6 @@
 package com.example.paddit.model
 
-data class UserModel(
+data class UserResponse(
     val id: Int,
     val username: String
 )
