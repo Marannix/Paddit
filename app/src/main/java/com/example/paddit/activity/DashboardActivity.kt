@@ -24,5 +24,6 @@ class DashboardActivity : BaseActivity() {
 
     private fun retrievePosts() {
         viewModel.getPosts()
+        viewModel.getUsers()
     }
 }
