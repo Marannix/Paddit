@@ -10,11 +10,12 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi
 ) {
 
-    fun getSpecificUser(id: Int): Single<UserModel> {
-       return getUserWithId(id)
+    fun getUsers(): Single<UserModel> {
+       return getUsersFromApi()
     }
 
-    private fun getUserWithId(id: Int): Single<UserModel> {
-        return userApi.getUserWithId(id).subscribeOn(Schedulers.io())
+    private fun getUsersFromApi(): Single<UserModel> {
+        return userApi.getUsers().subscribeOn(Schedulers.io())
+
     }
 }

@@ -31,8 +31,8 @@ class PostViewModel @Inject constructor(
         disposables.add(disposable)
     }
 
-    fun getUserWithId(userId: Int) {
-        val disposable = userRepository.getSpecificUser(userId)
+    fun getUsers() {
+        val disposable = userRepository.getUsers()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d("All good here - User", it.username)
@@ -42,6 +42,7 @@ class PostViewModel @Inject constructor(
 
         disposables.add(disposable)
     }
+    
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
