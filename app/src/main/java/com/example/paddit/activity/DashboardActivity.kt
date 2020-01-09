@@ -1,17 +1,10 @@
 package com.example.paddit.activity
 
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.paddit.api.PostApi
 import com.example.paddit.R
 import com.example.paddit.repository.PostRepository
 import com.example.paddit.viewmodel.PostViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import java.util.*
 import javax.inject.Inject
 
 class DashboardActivity : BaseActivity() {

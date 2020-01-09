@@ -15,8 +15,6 @@ class PostRepository @Inject constructor(
     }
 
     private fun retrievePostsFromApi(): Single<List<PostResponse>> {
-        return postApi.getPosts().map { listOfPosts ->
-            return@map listOfPosts
-        }.subscribeOn(Schedulers.io())
+        return postApi.getPosts().subscribeOn(Schedulers.io())
     }
 }
