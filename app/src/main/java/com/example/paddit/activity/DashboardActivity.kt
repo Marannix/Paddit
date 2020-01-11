@@ -36,8 +36,8 @@ class DashboardActivity : BaseActivity() {
                     Log.d("look chief", "I'm loading")
                 }
                 is PostViewModel.ViewState.Content -> {
-                    Log.d("look chief", it.post.toString())
-                    Log.d("look chief", it.users.toString())
+                    Log.d("look chief - post", it.post.toString())
+                    Log.d("look chief - user", it.users.toString())
                 }
                 is PostViewModel.ViewState.Error -> {
                     Log.d("look chief error", it.error)
