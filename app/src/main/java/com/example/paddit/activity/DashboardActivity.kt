@@ -2,7 +2,6 @@ package com.example.paddit.activity
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -36,19 +35,15 @@ class DashboardActivity : BaseActivity() {
                 PostViewModel.ViewState.Loading -> {
                     loadingDialog.show()
                     showErrorLayout(false)
-                    Log.d("look chief", "I'm loading")
                 }
                 is PostViewModel.ViewState.Content -> {
                     loadingDialog.hide()
                     initVenueFragment(it.post, it.users)
                     showErrorLayout(false)
-                    Log.d("look chief - post", it.post.toString())
-                    Log.d("look chief - user", it.users.toString())
                 }
                 is PostViewModel.ViewState.Error -> {
                     loadingDialog.hide()
                     showErrorLayout(true)
-                    Log.d("look chief error", it.error)
                 }
             }
         })
