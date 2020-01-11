@@ -5,9 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="defaultColour">#FAFAFA</color>
     <color name="white">#ffffff</color>
-
     <color name="deep_blue">#2b3648</color>
-
+    <color name="off_white">#fcfaf2</color>
+    <color name="grey">#777777</color>
+    <color name="light_grey">#dddddd</color>
     <color name="backgroundColor">@color/defaultColour</color>
-
 </resources>

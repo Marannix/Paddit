@@ -28,7 +28,6 @@ class DashboardActivity : BaseActivity() {
 
         viewModel.livedata.observe(this, Observer {
             when (it) {
-                //Remove empty
                 PostViewModel.ViewState.Empty -> {
                     loadingDialog.hide()
                     Log.d("look chief", "I'm empty")

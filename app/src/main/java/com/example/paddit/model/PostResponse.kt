@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class PostResponse(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val userId: Int
+    val userId: Int,
+    val title: String,
+    val body: String
 )

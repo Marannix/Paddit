@@ -50,7 +50,8 @@ class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.ViewHolder>() {
                    break
                }
            }
-//            itemView.username.text = posts.id.toString()
+            itemView.title.text = posts.title
+            itemView.body.text = posts.body
         }
     }
 
