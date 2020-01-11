@@ -2,4 +2,5 @@
     <string name="app_name">Paddit</string>
 
     <string name="lottie_loading_progress">loading_progress.json</string>
+    <string name="generic_error_message">Hey Chief, Something went terribly wrong!</string>
 </resources>

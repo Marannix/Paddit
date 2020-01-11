@@ -11,4 +11,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+    <include
+            android:id="@+id/errorLayout"
+            layout="@layout/error_layout"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
