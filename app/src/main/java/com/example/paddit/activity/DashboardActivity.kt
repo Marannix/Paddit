@@ -27,7 +27,7 @@ class DashboardActivity : BaseActivity() {
         }
         viewModel = this.let { ViewModelProviders.of(it, viewModelFactory).get(PostViewModel::class.java) }
         viewModel.start()
-        viewModel.livedata.observe(this, Observer {
+        viewModel.getLiveData().observe(this, Observer {
             when (it) {
                 PostViewModel.ViewState.Empty -> {
                     loadingDialog.hide()

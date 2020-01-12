@@ -1,5 +1,6 @@
 package com.example.paddit.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.paddit.model.PostResponse
@@ -18,11 +19,15 @@ class PostViewModel @Inject constructor(
     private val userUseCase: UserUseCase
 ) : ViewModel() {
 
-    val livedata = MutableLiveData<ViewState>().apply {
+    private val livedata = MutableLiveData<ViewState>().apply {
         value = ViewState.Empty
     }
 
     private val disposables = CompositeDisposable()
+
+    fun getLiveData(): LiveData<ViewState> {
+        return livedata
+    }
 
     fun start() {
         disposables.add(getInformation())
