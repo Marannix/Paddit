@@ -2,7 +2,7 @@ package com.example.paddit.dagger.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.paddit.viewmodel.PostViewModel
+import com.example.paddit.viewmodel.DashboardViewModel
 import com.example.paddit.viewmodel.ViewModelFactory
 import com.example.paddit.viewmodel.ViewModelKey
 import dagger.Binds
@@ -20,7 +20,7 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(PostViewModel::class)
-    internal abstract fun bindingPostModel(viewModel: PostViewModel): ViewModel
+    @ViewModelKey(DashboardViewModel::class)
+    internal abstract fun bindingPostModel(viewModel: DashboardViewModel): ViewModel
 
 }

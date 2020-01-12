@@ -17,7 +17,7 @@ import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 
-class PostViewModelTest {
+class DashboardViewModelTest {
 
     @Rule
     @JvmField
@@ -31,12 +31,12 @@ class PostViewModelTest {
 
     private lateinit var postResponse: List<PostResponse>
     private lateinit var userResponse: List<UserResponse>
-    private lateinit var viewModel: PostViewModel
+    private lateinit var viewModel: DashboardViewModel
 
     private val postUseCase = mock(PostUseCase::class.java)
     private val userUseCase = mock(UserUseCase::class.java)
-    private val observer: Observer<PostViewModel.ViewState> = mock(Observer::class.java) as Observer<PostViewModel.ViewState>
-    private val captor = ArgumentCaptor.forClass(PostViewModel.ViewState::class.java)
+    private val observer: Observer<DashboardViewModel.ViewState> = mock(Observer::class.java) as Observer<DashboardViewModel.ViewState>
+    private val captor = ArgumentCaptor.forClass(DashboardViewModel.ViewState::class.java)
 
 
     @Before
@@ -45,11 +45,11 @@ class PostViewModelTest {
         val userResponseJsonFile = UnitTestUtils.readJsonFile("users.json")
         postResponse = GsonBuilder().create().fromJson(postResponseJsonFile, Array<PostResponse>::class.java).toList()
         userResponse = GsonBuilder().create().fromJson(userResponseJsonFile, Array<UserResponse>::class.java).toList()
-        viewModel = PostViewModel(
+        viewModel = DashboardViewModel(
             postUseCase = postUseCase,
             userUseCase = userUseCase
         )
-        viewModel.getLiveData().observeForever(observer as Observer<in PostViewModel.ViewState>)
+        viewModel.getLiveData().observeForever(observer as Observer<in DashboardViewModel.ViewState>)
     }
 
     @Test
@@ -61,7 +61,7 @@ class PostViewModelTest {
 
         captor.run {
             verify(observer, times(2)).onChanged(capture())
-            assertEquals(PostViewModel.ViewState.Loading, value)
+            assertEquals(DashboardViewModel.ViewState.Loading, value)
         }
     }
 
@@ -76,7 +76,7 @@ class PostViewModelTest {
 
         captor.run {
             verify(observer, times(3)).onChanged(capture())
-            assertEquals(PostViewModel.ViewState.Content(postResponse, userResponse), value)
+            assertEquals(DashboardViewModel.ViewState.Content(postResponse, userResponse), value)
         }
     }
 
@@ -89,7 +89,7 @@ class PostViewModelTest {
 
         captor.run {
             verify(observer, times(3)).onChanged(capture())
-            assertEquals(PostViewModel.ViewState.Error("Both Post and Users are Empty"), value)
+            assertEquals(DashboardViewModel.ViewState.Error("Both Post and Users are Empty"), value)
         }
     }
 

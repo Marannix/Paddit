@@ -10,13 +10,13 @@ import com.example.paddit.dialog.FullscreenLoadingDialog
 import com.example.paddit.fragment.DashboardFragment
 import com.example.paddit.model.PostResponse
 import com.example.paddit.model.UserResponse
-import com.example.paddit.viewmodel.PostViewModel
+import com.example.paddit.viewmodel.DashboardViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 
 class DashboardActivity : BaseActivity() {
 
-    private lateinit var viewModel: PostViewModel
+    private lateinit var viewModel: DashboardViewModel
     private lateinit var loadingDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,23 +25,23 @@ class DashboardActivity : BaseActivity() {
         loadingDialog = FullscreenLoadingDialog(this).apply {
             setCanceledOnTouchOutside(false)
         }
-        viewModel = this.let { ViewModelProviders.of(it, viewModelFactory).get(PostViewModel::class.java) }
+        viewModel = this.let { ViewModelProviders.of(it, viewModelFactory).get(DashboardViewModel::class.java) }
         viewModel.start()
         viewModel.getLiveData().observe(this, Observer {
             when (it) {
-                PostViewModel.ViewState.Empty -> {
+                DashboardViewModel.ViewState.Empty -> {
                     loadingDialog.hide()
                 }
-                PostViewModel.ViewState.Loading -> {
+                DashboardViewModel.ViewState.Loading -> {
                     loadingDialog.show()
                     showErrorLayout(false)
                 }
-                is PostViewModel.ViewState.Content -> {
+                is DashboardViewModel.ViewState.Content -> {
                     loadingDialog.hide()
                     initVenueFragment(it.post, it.users)
                     showErrorLayout(false)
                 }
-                is PostViewModel.ViewState.Error -> {
+                is DashboardViewModel.ViewState.Error -> {
                     loadingDialog.hide()
                     showErrorLayout(true)
                 }

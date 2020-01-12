@@ -14,7 +14,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Singles
 import javax.inject.Inject
 
-class PostViewModel @Inject constructor(
+class DashboardViewModel @Inject constructor(
     private val postUseCase: PostUseCase,
     private val userUseCase: UserUseCase
 ) : ViewModel() {
