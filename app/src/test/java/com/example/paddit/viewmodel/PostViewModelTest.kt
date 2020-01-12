@@ -3,6 +3,7 @@ package com.example.paddit.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.paddit.model.PostResponse
+import com.example.paddit.model.UserResponse
 import com.example.paddit.usecase.PostUseCase
 import com.example.paddit.usecase.UserUseCase
 import com.example.paddit.utils.RxImmediateSchedulerRule
@@ -22,21 +23,28 @@ class PostViewModelTest {
     @JvmField
     var testSchedulerRule = RxImmediateSchedulerRule()
 
+
+    // Allow me to run LiveData synchronously.
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
 
     private lateinit var postResponse: List<PostResponse>
+    private lateinit var userResponse: List<UserResponse>
+    private lateinit var viewModel: PostViewModel
+
     private val postUseCase = mock(PostUseCase::class.java)
     private val userUseCase = mock(UserUseCase::class.java)
     private val observer: Observer<PostViewModel.ViewState> = mock(Observer::class.java) as Observer<PostViewModel.ViewState>
     private val captor = ArgumentCaptor.forClass(PostViewModel.ViewState::class.java)
-    private lateinit var viewModel: PostViewModel
+
 
     @Before
     fun setUp() {
-        val response = UnitTestUtils.readJsonFile("post.json")
-        postResponse = GsonBuilder().create().fromJson(response, Array<PostResponse>::class.java).toList()
+        val postResponseJsonFile = UnitTestUtils.readJsonFile("post.json")
+        val userResponseJsonFile = UnitTestUtils.readJsonFile("users.json")
+        postResponse = GsonBuilder().create().fromJson(postResponseJsonFile, Array<PostResponse>::class.java).toList()
+        userResponse = GsonBuilder().create().fromJson(userResponseJsonFile, Array<UserResponse>::class.java).toList()
         viewModel = PostViewModel(
             postUseCase = postUseCase,
             userUseCase = userUseCase
@@ -58,6 +66,21 @@ class PostViewModelTest {
     }
 
     @Test
+    fun `when posts and users fetched then emits Content state`() {
+        `when`(postUseCase.getPosts()).thenReturn(Single.just(postResponse))
+        `when`(userUseCase.getUsers()).thenReturn(Single.just(userResponse))
+
+        viewModel.start()
+
+        // capture() captures the argument when the onChanged is called on the observer
+
+        captor.run {
+            verify(observer, times(3)).onChanged(capture())
+            assertEquals(PostViewModel.ViewState.Content(postResponse, userResponse), value)
+        }
+    }
+
+    @Test
     fun `given empty posts and user when fetching then emits Error state`() {
         `when`(postUseCase.getPosts()).thenReturn(Single.just(emptyList()))
         `when`(userUseCase.getUsers()).thenReturn(Single.just(emptyList()))
@@ -70,4 +93,8 @@ class PostViewModelTest {
         }
     }
 
+    /**
+     * I added captor as a way to test the observable
+     * https://dev.to/arthlimchiu/how-to-unit-test-livedata-and-viewmodel-5h7f
+     */
 }
