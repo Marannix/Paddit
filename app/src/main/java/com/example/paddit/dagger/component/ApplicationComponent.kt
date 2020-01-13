@@ -12,6 +12,9 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
+/**
+ * This component is responsible for injecting the Application class.
+ */
 @Singleton
 @Component(
     modules = [ActivityBuilder::class,

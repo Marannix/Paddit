@@ -16,12 +16,14 @@ class PostRepository @Inject constructor(
         return retrievePostsFromDb()
     }
 
+    /**
+     *  Get the posts information from the database, if empty then request from api
+     */
     private fun retrievePostsFromDb(): Single<List<PostResponse>> {
         return postsDao.getPosts()
             .flatMap { listOfPosts ->
                 if (listOfPosts.isEmpty()) {
-                    // TODO: But wait... doesn't this mean the database isn't updated??
-                    // Maybe i should have a refresh button
+                    // This isn't good for a production application as the list isn't updated once populated
                     retrievePostsFromApi()
                 } else {
                     Single.just(listOfPosts)
@@ -29,6 +31,9 @@ class PostRepository @Inject constructor(
             }
     }
 
+    /**
+     *  Get the posts information from the api
+     */
     private fun retrievePostsFromApi(): Single<List<PostResponse>> {
         return postApi.getPosts()
             .doOnSuccess {

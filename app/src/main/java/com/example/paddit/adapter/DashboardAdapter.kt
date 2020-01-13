@@ -9,6 +9,8 @@ import com.example.paddit.model.PostResponse
 import com.example.paddit.model.UserResponse
 import kotlinx.android.synthetic.main.dashboard_items.view.*
 
+private const val MAX_SIZE = 10
+
 class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.ViewHolder>() {
 
     private var posts: List<PostResponse> = emptyList()
@@ -19,8 +21,9 @@ class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return if (posts.size > 10) {
-            10
+        // As required in the test, display a maximum of 10 posts
+        return if (posts.size > MAX_SIZE) {
+            MAX_SIZE
         } else {
             posts.size
         }
@@ -33,6 +36,7 @@ class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        // Safeguard, not really required since the adapter is only being created when there are post available
         if (posts.isNotEmpty()) {
             holder.bind(posts[position], users)
         }
@@ -44,6 +48,7 @@ class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.ViewHolder>() {
             users: List<UserResponse>
         ) {
 
+            // Compare post userid and users id to find the correct username
            for (i in 0..users.size) {
                if (users[i].id == posts.userId) {
                    itemView.username.text = users[i].username

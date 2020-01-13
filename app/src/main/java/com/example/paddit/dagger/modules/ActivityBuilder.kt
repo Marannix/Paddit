@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = [DashboardActivityModule::class])
-    abstract fun contributeLoginActivity(): DashboardActivity
+    abstract fun contributeDashboardActivity(): DashboardActivity
 }

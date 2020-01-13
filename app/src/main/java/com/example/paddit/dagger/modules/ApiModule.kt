@@ -14,6 +14,10 @@ import javax.inject.Singleton
 
 const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
+/**
+ * Api Module for networking
+ */
+
 @Module
 class ApiModule {
 

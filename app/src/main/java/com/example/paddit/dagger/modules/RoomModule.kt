@@ -9,6 +9,9 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/**
+ * Modules for Room Database
+ */
 @Module
 class RoomModule {
 

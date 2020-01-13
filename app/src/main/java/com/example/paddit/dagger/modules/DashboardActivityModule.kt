@@ -7,6 +7,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
+/**
+ * Modules for the Dashboard activity and fragment
+ */
 @Module
 abstract class DashboardActivityModule {
 

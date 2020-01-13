@@ -7,6 +7,9 @@ import com.example.paddit.data.UserDao
 import com.example.paddit.model.PostResponse
 import com.example.paddit.model.UserResponse
 
+/**
+ * Database for the application
+ */
 @Database(
     entities = [PostResponse::class, UserResponse::class],
     version = 1

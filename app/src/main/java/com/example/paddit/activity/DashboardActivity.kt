@@ -27,6 +27,13 @@ class DashboardActivity : BaseActivity() {
         }
         viewModel = this.let { ViewModelProviders.of(it, viewModelFactory).get(DashboardViewModel::class.java) }
         viewModel.start()
+        subscribeToDashboardViewState()
+    }
+
+    /**
+     * The UI is updated based on the view state emitted from the viewmodel
+     */
+    private fun subscribeToDashboardViewState() {
         viewModel.getLiveData().observe(this, Observer {
             when (it) {
                 DashboardViewModel.ViewState.Empty -> {
@@ -38,11 +45,13 @@ class DashboardActivity : BaseActivity() {
                 }
                 is DashboardViewModel.ViewState.Content -> {
                     loadingDialog.hide()
+                    // A fragment is created when there is data which is then populated inside a recyclerview
                     initVenueFragment(it.post, it.users)
                     showErrorLayout(false)
                 }
                 is DashboardViewModel.ViewState.Error -> {
                     loadingDialog.hide()
+                    // Generic error layout when something goes wrong
                     showErrorLayout(true)
                 }
             }

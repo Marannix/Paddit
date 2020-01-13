@@ -16,6 +16,9 @@ class UserRepository @Inject constructor(
        return retrieveUsersFromDb()
     }
 
+    /**
+     *  Get the users information from the database, if empty then request from api
+     */
     private fun retrieveUsersFromDb() : Single<List<UserResponse>> {
         return userDao.getUsers().
             flatMap { listOfUsers ->
@@ -29,6 +32,9 @@ class UserRepository @Inject constructor(
             }
     }
 
+    /**
+     *  Get the users information from the api
+     */
     private fun getUsersFromApi(): Single<List<UserResponse>> {
         return userApi.getUsers().doOnSuccess {listOfUsers ->
           userDao.insertUsers(listOfUsers)

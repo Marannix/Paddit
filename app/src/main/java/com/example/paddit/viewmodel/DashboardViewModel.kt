@@ -51,6 +51,8 @@ class DashboardViewModel @Inject constructor(
             is Event.Success -> {
                 //TODO: Fix hacky way of handling error
                 if (event.post.isNullOrEmpty() && event.users.isNullOrEmpty()) {
+                    // This should be extracted to a String however ViewModel shouldn't have reference to the context
+                   // Not the best way to handle this
                     ViewState.Error("Both Post and Users are Empty")
                 } else {
                     ViewState.Content(event.post, event.users)
